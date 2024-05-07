@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS styles */
+    body {
+      background-color: #f0f2f5;
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      background-color: #2c3e50; /* Dark blue */
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand {
+      color: #ffffff; /* White */
+      font-weight: bold;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    .profile-header {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: block;
+      border: 5px solid #ffffff; /* White border */
+    }
+    .profile-name {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #2c3e50; /* Dark blue */
+    }
+    .profile-details {
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    .btn-update-profile {
+      width: 100%;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    .btn-update-profile:hover {
+      background-color: #2c3e50; /* Dark blue */
+    }
+    .btn-update-profile:focus {
+      background-color: #1d2836; /* Darker blue */
+      box-shadow: none;
+    }
+    .feature-options {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    .feature-options h4 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #2c3e50; /* Dark blue */
+    }
+    .feature-description {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #495057; /* Gray */
+    }
+    .btn-feature {
+      width: 100%;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    .btn-feature:hover {
+      background-color: #2c3e50; /* Dark blue */
+    }
+    .btn-feature:focus {
+      background-color: #1d2836; /* Darker blue */
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Lung Disease Detection</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="profile-header text-center">
+                {% if user.profile_image %}
+                    <img src="data:image/jpeg;base64,{{ user.profile_image }}" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+                {% endif %}
+                <h2 class="profile-name">{{ user.name }}</h2>
+                <div class="profile-details">
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Address:</strong> {{ user.address }}</p>
+                    <!-- Add more profile details as needed -->
+                </div>
+          <a href="/update_profile" class="btn btn-primary btn-update-profile">Update Profile</a>
+		  <a href="/logout" class="btn btn-danger">Logout</a> <!-- Logout button -->
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="feature-options">
+    <h4>Features</h4>
+    <div class="feature-description">
+        <p>Analyze symptoms provided by the user to detect potential lung-related diseases.</p>
+        <img src="https://www.cancer.net/sites/cancer.net/files/lung_final_olderasianman_0.jpg" alt="Disease Detection from Image" class="img-fluid mb-3">
+        <a href="/disease_detection" class="btn btn-primary btn-feature">Disease Detection from Image</a>
+    </div>
+    <div class="feature-description">
+        <p>Connect with nearby doctors specialized in lung-related diseases.</p>
+        <img src="https://www.album-online.com/photos/prev/YzI2MDRhMA/album_alb3788948.jpg" alt="Doctor Consultation" class="img-fluid mb-3">
+        <a href="#" class="btn btn-primary btn-feature">Doctor Consultation</a>
+    </div>
+    <div class="feature-description">
+        <p>Add and manage patient details including name, age, gender, contact information, and medical history.</p>
+        <img src="data:image/jpeg;base64,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" alt="Add Patient Details" class="img-fluid mb-3">
+        <a href="{{ url_for('add_patient_details') }}" class="btn btn-primary btn-feature">Add Patient Details</a>
+    </div>
+	<div class="feature-description">
+    <p>View list of patients added by the user.</p>
+	<img src="https://miro.medium.com/v2/resize:fit:1184/0*lhStvK03S5t9nWv-.jpg" alt="View Patients List" class="img-fluid mb-3">
+    <a href="{{ url_for('view_patients') }}" class="btn btn-primary btn-feature">View Patients List</a>
+  </div>
+    <!-- Add more feature options as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- JavaScript for displaying pop-up message -->
+  <script>
+    $(document).ready(function(){
+      // Display sign-in or update profile message as pop-up
+      {% if message %}
+      alert("{{ message }}");
+      {% endif %}
+    });
+  </script>
+</body>
+</html>
